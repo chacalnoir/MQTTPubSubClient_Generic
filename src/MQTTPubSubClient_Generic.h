@@ -201,6 +201,7 @@ class PubSubClient
           MQTT_LOGDEBUG("connect: websocket client did not connect in time");
           return false;
         }
+        now_ms = millis();
       }
 
 #endif
