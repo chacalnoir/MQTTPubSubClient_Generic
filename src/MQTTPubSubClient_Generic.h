@@ -188,11 +188,19 @@ class PubSubClient
     {
 #ifdef MQTTPUBSUBCLIENT_USE_WEBSOCKETS
 
+      uint32_t now_ms = millis();
+      uint32_t start_ms = now_ms;
       while (!client->isConnected())
       {
         client->loop();
 
         delay(10);
+        if(now_ms ? (start_ms + timeout_ms))
+        {
+          // Could not connect, so break out and return that it could not connect
+          MQTT_LOGDEBUG("connect: websocket client did not connect in time");
+          return false;
+        }
       }
 
 #endif
