@@ -195,7 +195,7 @@ class PubSubClient
         client->loop();
 
         delay(10);
-        if(now_ms ? (start_ms + timeout_ms))
+        if(now_ms > (start_ms + timeout_ms))
         {
           // Could not connect, so break out and return that it could not connect
           MQTT_LOGDEBUG("connect: websocket client did not connect in time");
