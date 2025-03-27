@@ -184,18 +184,19 @@ class PubSubClient
 
     ////////////////////////////////////////
 
-    bool connect(const String& client_id, const String& user = "", const String& pass = "")
+    bool connect(const String& client_id, const String& user = "", const String& pass = "", const uint32_t timeout_override_ms = 0)
     {
 #ifdef MQTTPUBSUBCLIENT_USE_WEBSOCKETS
 
       uint32_t now_ms = millis();
       uint32_t start_ms = now_ms;
+      uint32_t loop_timeout_ms = (timeout_override_ms > 0) ? timeout_override_ms : timeout_ms;
       while (!client->isConnected())
       {
         client->loop();
 
         delay(10);
-        if(now_ms > (start_ms + timeout_ms))
+        if((now_ms > (start_ms + loop_timeout_ms)) && !client->isConnected())
         {
           // Could not connect, so break out and return that it could not connect
           MQTT_LOGDEBUG("connect: websocket client did not connect in time");
